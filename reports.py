@@ -16,7 +16,7 @@ def getreport(report_id):
     q = q.namedresult()
     return ast.literal_eval(q[0].type)
 
-@api.representation('application/pdf') 
+@api.representation('application/pdf')
 def pdf_rep(data, code, headers):
     pdf = fpdf.FPDF("P", "mm", "A4")
     pdf.add_page()
@@ -32,15 +32,13 @@ def pdf_rep(data, code, headers):
         pdf.cell(0, 10, item[1][1] + ": " + item[0][1], align='L', ln=1)
     pdf.output("report.pdf")
     f = file("report.pdf", "r")
-    resp = Response(f, status=code, headers=headers,
+    return Response(f, status=code, headers=headers,
                     mimetype='application/pdf')
-    return resp
 
 @api.representation('application/xml')
 def xml_rep(data, code, headers):
-    resp = Response(dicttoxml(data), status=code,
+    return Response(dicttoxml(data), status=code,
                     headers=headers, mimetype='application/xml')
-    return resp
 
 def abort_if_report_doesnt_exist(report_id):
     numreports = db.query("SELECT count(id) FROM reports").namedresult()
@@ -51,7 +49,7 @@ def abort_if_report_doesnt_exist(report_id):
 # Report in XML
 # shows a single report item as XML and lets you delete a report
 # based on the report_id
-@api.resource('/reports/xml/<report_id>')
+@api.resource('/reports/<report_id>/xml')
 class ReportXML(Resource):
     def get(self, report_id):
         report_id = int(report_id)
@@ -68,7 +66,7 @@ class ReportXML(Resource):
 # Report in PDF
 # shows a single report item as PDF and lets you delete a report
 # based on the report_id
-@api.resource('/reports/pdf/<report_id>')
+@api.resource('/reports/<report_id>/pdf')
 class ReportPDF(Resource):
     def get(self, report_id):
         report_id = int(report_id)
