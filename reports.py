@@ -22,14 +22,14 @@ def pdf_rep(data, code, headers):
     pdf.add_page()
     pdf.set_font('Arial','B',16);
     pdf.set_title("The Report")
-    pdf.cell(0, 0, "The Report", align='C', ln=1, border='B')
+    pdf.cell(0, 10, "The Report", align='C', ln=1, border='B')
     pdf.ln(5)
-    pdf.cell(0, 0, "Organization: " + data['organization'], align='R', ln=1)
-    pdf.cell(0, 0, "Reported: " + data['reported_at'], align='R', ln=1)
-    pdf.cell(0, 0, "Created: " + data['created_at'], align='R', ln=1)
+    pdf.cell(0, 10, "Organization: " + data['organization'], align='R', ln=1)
+    pdf.cell(0, 10, "Reported: " + data['reported_at'], align='R', ln=1)
+    pdf.cell(0, 10, "Created: " + data['created_at'], align='R', ln=1)
     for item in data['inventory']:
         item = item.items()
-        pdf.cell(0, 0, item[1][1] + ": " + item[0][1], align='L', ln=1)
+        pdf.cell(0, 10, item[1][1] + ": " + item[0][1], align='L', ln=1)
     pdf.output("report.pdf")
     f = file("report.pdf", "r")
     return Response(f, status=code, headers=headers,
