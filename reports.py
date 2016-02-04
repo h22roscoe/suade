@@ -22,14 +22,14 @@ def pdf_rep(data, code, headers):
     pdf.add_page()
     pdf.set_font('Arial','B',16);
     pdf.set_title("The Report")
-    pdf.cell(0, 10, "The Report", align='C', ln=1, border='B')
+    pdf.cell(0, 0, "The Report", align='C', ln=1, border='B')
     pdf.ln(5)
-    pdf.cell(0, 10, "Organization: " + data['organization'], align='R', ln=1)
-    pdf.cell(0, 10, "Reported: " + data['reported_at'], align='R', ln=1)
-    pdf.cell(0, 10, "Created: " + data['created_at'], align='R', ln=1)
+    pdf.cell(0, 0, "Organization: " + data['organization'], align='R', ln=1)
+    pdf.cell(0, 0, "Reported: " + data['reported_at'], align='R', ln=1)
+    pdf.cell(0, 0, "Created: " + data['created_at'], align='R', ln=1)
     for item in data['inventory']:
         item = item.items()
-        pdf.cell(0, 10, item[1][1] + ": " + item[0][1], align='L', ln=1)
+        pdf.cell(0, 0, item[1][1] + ": " + item[0][1], align='L', ln=1)
     pdf.output("report.pdf")
     f = file("report.pdf", "r")
     return Response(f, status=code, headers=headers,
@@ -57,12 +57,6 @@ class ReportXML(Resource):
         dic = getreport(report_id)
         return xml_rep(dic, 200, {})
 
-    def delete(self, report_id):
-        report_id = int(report_id)
-        abort_if_report_doesnt_exist(todo_id)
-        db.delete('reports', id=report_id)
-        return '', 204
-
 # Report in PDF
 # shows a single report item as PDF and lets you delete a report
 # based on the report_id
@@ -73,12 +67,6 @@ class ReportPDF(Resource):
         abort_if_report_doesnt_exist(report_id)
         dic = getreport(report_id)
         return pdf_rep(dic, 200, {}) 
-
-    def delete(self, report_id):
-        report_id = int(report_id)
-        abort_if_report_doesnt_exist(todo_id)
-        db.delete('reports', id=report_id)
-        return '', 204
 
 if __name__ == '__main__':
     app.run(debug=True)
